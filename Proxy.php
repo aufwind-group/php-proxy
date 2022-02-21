@@ -324,7 +324,10 @@ class Proxy
                 }
             }
 
-            curl_setopt($request, CURLOPT_POSTFIELDS, $data + $_POST);
+            $array = [];
+            static::buildHttpQueryForCurl($data + $_POST, $array);
+            $postData = urldecode(http_build_query($array));
+            curl_setopt($request, CURLOPT_POSTFIELDS, $postData);
         }
 
         $headers = static::getIncomingRequestHeaders(static::getSkippedHeaders());
@@ -338,6 +341,29 @@ class Proxy
         ]);
 
         return $request;
+    }
+
+    /**
+     *
+     * @param array $array
+     * @param array $new
+     * @param string $prefix
+     * @return void
+     */
+    public static function buildHttpQueryForCurl($array, &$new = [], $prefix = null) {
+        if (is_object($array)) {
+            $array = get_object_vars($array);
+        }
+
+        foreach ($array AS $key => $value) {
+            $k = isset($prefix) ? $prefix . '[' . $key . ']' : $key;
+
+            if (is_array($value) OR is_object($value)) {
+                static::buildHttpQueryForCurl($value, $new, $k);
+            } else {
+                $new[$k] = $value;
+            }
+        }
     }
 
     /**
