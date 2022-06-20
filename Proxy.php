@@ -422,7 +422,7 @@ class Proxy
 
             // Pass following headers to response
             if (in_array($loweredHeaderName,
-                ['content-type', 'content-language', 'content-security', 'server'])) {
+                ['content-type', 'content-language', 'content-security', 'server', 'content-disposition', 'location'])) {
                 header("$headerName: $headerValue");
             } elseif (strpos($loweredHeaderName, 'x-') === 0) {
                 header("$headerName: $headerValue");
