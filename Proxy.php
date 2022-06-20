@@ -337,6 +337,8 @@ class Proxy
             CURLOPT_HEADER => static::$CURLOPT_HEADER,
             CURLOPT_RETURNTRANSFER => static::$CURLOPT_RETURNTRANSFER,
             CURLINFO_HEADER_OUT => true,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_HTTPHEADER => $headers
         ]);
 
